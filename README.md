@@ -13,7 +13,7 @@ EcoTracker is a mobile application that helps you track your environmental footp
 
 - Node.js >= 20.x
 - Expo CLI >= 5.x
-- iOS Simulator or Android Emulator for testing)
+- iOS Simulator or Android Emulator for testing
 
 ## Installation
 
