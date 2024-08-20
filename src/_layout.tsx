@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
     footerButtonText: {
         color: theme.colors.text,
         fontSize: theme.typography.fontSize.medium,
-
+        fontWeight: theme.typography.fontWeight.medium as FontWeight,
     },
 });
 
