@@ -38,16 +38,20 @@ Follow these steps to set up the project locally.
 
 ## Project Structure
  
-- ├── android             # Android configuration files
-- ├── ios                 # iOS configuration files
 - ├── src
-- │   ├── components      # App components
-- │   ├── screens         # Different screens
-- │   ├── navigation      # App Router
 - │   ├── assets          # Images, fonts, etc.
-- │   └── utils           # Helper functions
+- │   ├── components      # App components
+- │   ├── features        # Redux slice
+- │   ├── navigation      # App Router
+- │   ├── screens         # Different screens
+- │   ├── services        # API
+- │   ├── store           # Redux store
+- │   ├── styles          # Themes
+- 
+- │   └── utils           # Helper functions, hooks etc.
 - |    └── App.tsx  
-- ├── index.js              # Main
+- |    └── _layout.tsx  
+- ├── index.js            # Main
 - └── package.json        # Dependencies
 
 
