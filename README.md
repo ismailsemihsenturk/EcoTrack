@@ -30,10 +30,10 @@ Follow these steps to set up the project locally.
     npx expo start
 
 3. **Run the App on Your Device:**
-    npm install
+    * npm install
     * iOS: Use the Expo Go app or an iOS Simulator.
     * Android: Use the Expo Go app or an Android Emulator.
-    After running npx expo start, you can scan the QR code with your device to view the app in Expo Go.
+    * After running npx expo start, you can scan the QR code with your device to view the app in Expo Go.
 
 
 ## Project Structure
