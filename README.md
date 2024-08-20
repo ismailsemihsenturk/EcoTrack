@@ -47,7 +47,6 @@ Follow these steps to set up the project locally.
 - │   ├── services        # API
 - │   ├── store           # Redux store
 - │   ├── styles          # Themes
-- 
 - │   └── utils           # Helper functions, hooks etc.
 - |    └── App.tsx  
 - |    └── _layout.tsx  
