@@ -37,17 +37,17 @@ Follow these steps to set up the project locally.
 
 
 ## Project Structure
-.
-├── android             # Android configuration files
-├── ios                 # iOS configuration files
-├── src
-│   ├── components      # App components
-│   ├── screens         # Different scrrens
-│   ├── navigation      # App Router
-│   ├── assets          # Images, fonts, etc.
-│   └── utils           # Helper functions
-    └── App.tsx  
-├── index.js              # Main
-└── package.json        # Dependencies
+ 
+- ├── android             # Android configuration files
+- ├── ios                 # iOS configuration files
+- ├── src
+- │   ├── components      # App components
+- │   ├── screens         # Different scrrens
+- │   ├── navigation      # App Router
+- │   ├── assets          # Images, fonts, etc.
+- │   └── utils           # Helper functions
+- |    └── App.tsx  
+- ├── index.js              # Main
+- └── package.json        # Dependencies
 
 
