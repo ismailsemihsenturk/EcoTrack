@@ -42,7 +42,7 @@ Follow these steps to set up the project locally.
 - ├── ios                 # iOS configuration files
 - ├── src
 - │   ├── components      # App components
-- │   ├── screens         # Different scrrens
+- │   ├── screens         # Different screens
 - │   ├── navigation      # App Router
 - │   ├── assets          # Images, fonts, etc.
 - │   └── utils           # Helper functions
