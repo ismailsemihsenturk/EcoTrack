@@ -2,10 +2,11 @@ import { createSlice,PayloadAction  } from '@reduxjs/toolkit'
 import type { RootState } from '../store/index'
 import { UserState } from '../types/interfaces';
 
+
 const initialState: UserState = {
   userId: '',
-  userName: '',
-  userEmail: '',
+  userName: 'İsmail Semih Şentürk',
+  userEmail: 'senturkis98@hotmail.com',
   userPreferences: {},
 };
 

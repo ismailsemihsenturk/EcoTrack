@@ -3,9 +3,10 @@ import { useAppSelector, useAppDispatch } from '../utils/hooks'
 import { setUserData } from '../features/userSlice'
 import { Button, View,Text } from 'react-native'
 import { UserState } from '../types/interfaces'
+import { RootState } from '../store/index';
 
 export function Counter() {
-    const stateObj = useAppSelector((state) => state.user)
+    const stateObj = useAppSelector((state:RootState) => state.user)
     const dispatch = useAppDispatch()
     const initialState: UserState = {
         userId: '1',
