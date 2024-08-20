@@ -1,35 +1,33 @@
 import { createSlice,PayloadAction  } from '@reduxjs/toolkit'
 import type { RootState } from '../store/index'
+import { UserState } from '../types/interfaces';
 
-interface InitialState {
-    value: number,
-    name: string,
-}
-const initialState: InitialState = {
-    value: 0,
-    name: "ismail semih şentürk"
-}
+const initialState: UserState = {
+  userId: '',
+  userName: '',
+  userEmail: '',
+  userPreferences: {},
+};
 
-export const counterSlice = createSlice({
-    name: 'counter',
-    initialState, 
-    reducers: {
-        increment: (state) => {
-          state.value += 1
-        },
-        decrement: (state) => {
-          state.value -= 1
-        },
-        // Use the PayloadAction type to declare the contents of `action.payload`
-        incrementByAmount: (state, action: PayloadAction<number>) => {
-          state.value += action.payload
-        },
-      },
-})
+const userSlice = createSlice({
+  name: 'user',
+  initialState,
+  reducers: {
+    setUserData: (state, action: PayloadAction<Partial<UserState>>) => {
+      state.userId = action.payload.userId || state.userId;
+      state.userName = action.payload.userName || state.userName;
+      state.userEmail = action.payload.userEmail || state.userEmail;
+      state.userPreferences = {
+        ...state.userPreferences,
+        ...(action.payload.userPreferences || {}),
+      };
+    },
+  },
+});
 
-export const { increment, decrement, incrementByAmount } = counterSlice.actions
+export const { setUserData } = userSlice.actions
 
 // Other code such as selectors can use the imported `RootState` type
-export const selectCount = (state: RootState) => state.counter.value
+export const selectUserId = (state: RootState) => state.user.userId
 
-export default counterSlice.reducer
+export default userSlice.reducer
