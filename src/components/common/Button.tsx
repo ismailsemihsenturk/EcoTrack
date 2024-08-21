@@ -27,6 +27,7 @@ interface ButtonProps {
           style,
         ]}
         onPress={handlePress}
+        activeOpacity={0.7} 
       >
         <Text style={[styles.footerButtonText,
             {color:
