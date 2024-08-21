@@ -7,7 +7,7 @@ export const theme = {
     secondary: '#2E7D32', // Koyu yeşil
     accent: '#FFEB3B', // Sarı renk
     background: '#F1F8E9', // Açık yeşil
-    text: '#212121', // Koyu gri
+    text: '#FFFFFF', // Koyu gri
   },
   typography: {
     fontFamily: 'Roboto, sans-serif',
