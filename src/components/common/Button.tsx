@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native'
+import { StyleSheet, Text, View, TouchableOpacity, ViewStyle } from 'react-native'
 import React, { Children, useState } from 'react'
 import { FontWeight, theme } from '../../styles/theme';
 
@@ -6,9 +6,10 @@ interface ButtonProps {
     children: React.ReactNode;
     onPress: (value: Partial<React.ReactNode>) => void;
     isActive?: string;
+    style?: ViewStyle;
   }
   
-  const Button: React.FC<ButtonProps> = ({ children, onPress, isActive }) => {
+  const Button: React.FC<ButtonProps> = ({ children, onPress, isActive, style }) => {
     const handlePress = () => {
       onPress(children);
     };
@@ -23,10 +24,17 @@ interface ButtonProps {
                 ? theme.colors.secondary
                 : theme.colors.primary,
           },
+          style,
         ]}
         onPress={handlePress}
       >
-        <Text style={styles.footerButtonText}>{children}</Text>
+        <Text style={[styles.footerButtonText,
+            {color:
+                isActive === children?.toString()
+                ? theme.colors.text
+                : theme.colors.secondary_text,
+            },
+            ]}>{children}</Text>
       </TouchableOpacity>
     );
   };
@@ -38,10 +46,14 @@ const styles = StyleSheet.create({
       alignItems: 'center',
       justifyContent: 'center',
       paddingVertical: theme.spacing.sm,
+      borderRightColor: theme.colors.border,
     },
     footerButtonText: {
       color: theme.colors.text,
       fontSize: theme.typography.fontSize.medium,
       fontWeight: theme.typography.fontWeight.medium as FontWeight,
     },
+    lastButton: {
+        borderRightWidth: 0, // Son buton için sağ kenar çizgisi kaldırılıyor
+      },
   });

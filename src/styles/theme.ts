@@ -4,10 +4,12 @@ export type FontWeight = '100' | '200' | '300' | '400' | '500' | '600' | '700' |
 export const theme = {
   colors: {
     primary: '#4CAF50', // Yeşil renk
-    secondary: '#2E7D32', // Koyu yeşil
+    secondary: '#3E903E', // Koyu yeşil
     accent: '#FFEB3B', // Sarı renk
     background: '#F1F8E9', // Açık yeşil
     text: '#FFFFFF', // Koyu gri
+    secondary_text:'#404642',
+    border:'#3E903E'
   },
   typography: {
     fontFamily: 'Roboto, sans-serif',
