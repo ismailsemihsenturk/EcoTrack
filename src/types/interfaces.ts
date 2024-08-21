@@ -32,3 +32,9 @@ export interface TipsState {
     tipCategories: string[];
     tipsSavedByUser: string[];
 }
+
+export type RootStackParamList = {
+    Home: { id?: string };
+    Profile: { id?: string };
+    Layout: { id?: string };
+};

@@ -4,19 +4,39 @@ import store from './store/index'
 import { Provider } from 'react-redux'
 import { Counter } from './features/Counter';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator,StackNavigationProp  } from '@react-navigation/stack';
 import Layout from './_layout';
+import { RootStackParamList } from './types/interfaces';
+import Home from './screens/Home';
+import Profile from './screens/Profile';
+
+
+const Stack = createStackNavigator<RootStackParamList>();
 
 export default function App() {
   return (
     <Provider store={store}>
-      <SafeAreaProvider>
-        <Layout>
-          <View style={styles.container}>
-            <Text>Open up App.tsx to start working on your app!</Text>
-            <StatusBar style="auto" />
-          </View>
-        </Layout>
-      </SafeAreaProvider>
+      <NavigationContainer>
+        <SafeAreaProvider>
+          <Stack.Navigator>
+            <Stack.Screen name="Home" options={{ headerShown: false }}>
+              {(props) => (
+                <Layout {...props}>
+                  <Home {...props} />
+                </Layout>
+              )}
+            </Stack.Screen>
+            <Stack.Screen name="Profile" options={{ headerShown: false }}>
+              {(props) => (
+                <Layout {...props}>
+                  <Profile {...props} />
+                </Layout>
+              )}
+            </Stack.Screen>
+          </Stack.Navigator>
+        </SafeAreaProvider>
+      </NavigationContainer>
     </Provider>
   );
 }

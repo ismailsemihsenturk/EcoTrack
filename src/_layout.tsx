@@ -6,16 +6,35 @@ import { useAppSelector, useAppDispatch } from './utils/hooks'
 import { RootState } from './store/index';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Button from './components/common/Button';
+import { RootStackParamList } from './types/interfaces';
+import { StackNavigationProp } from '@react-navigation/stack';
 
 interface LayoutProps {
     children: React.ReactNode;
+    navigation: StackNavigationProp<RootStackParamList, 'Layout'>;
 }
-const Layout: React.FC<LayoutProps> = ({ children }) => {
+const ScreenNames = {
+    Home: 'Home',
+    Profile: 'Profile',
+  } as const;
+type ScreenName = keyof typeof ScreenNames;
+
+const Layout: React.FC<LayoutProps> = ({ children,navigation }) => {
     const { top: safeAreaTop } = useSafeAreaInsets();
     const { userName } = useAppSelector((state: RootState) => state.user)
     const [activeButton, setActiveButton] = useState<Partial<React.ReactNode> | null>("Home");
     const handleButtonPress = (button: Partial<React.ReactNode>) => {
         setActiveButton(button);
+        if (button) {
+            // Buton değerini stringe dönüştür
+            let pageName: string = button.toString();
+            if (pageName in ScreenNames) {
+              let typedPageName = pageName as ScreenName;
+              navigation.navigate(ScreenNames[typedPageName], {});
+            } else {
+              console.error("Invalid page name");
+            }
+          }
       };
 
     return (
