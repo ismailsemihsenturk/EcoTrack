@@ -10,6 +10,8 @@ import Layout from './_layout';
 import { RootStackParamList } from './types/interfaces';
 import Home from './screens/Home';
 import Profile from './screens/Profile';
+import Calculator from './screens/Calculator';
+import Badgets from './screens/Badgets';
 
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -24,6 +26,20 @@ export default function App() {
               {(props) => (
                 <Layout {...props}>
                   <Home {...props} />
+                </Layout>
+              )}
+            </Stack.Screen>
+            <Stack.Screen name="Calculator" options={{ headerShown: false }}>
+              {(props) => (
+                <Layout {...props}>
+                  <Calculator {...props} />
+                </Layout>
+              )}
+            </Stack.Screen>
+            <Stack.Screen name="Badgets" options={{ headerShown: false }}>
+              {(props) => (
+                <Layout {...props}>
+                  <Badgets {...props} />
                 </Layout>
               )}
             </Stack.Screen>

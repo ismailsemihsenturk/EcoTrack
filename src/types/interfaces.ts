@@ -37,4 +37,13 @@ export type RootStackParamList = {
     Home: { id?: string };
     Profile: { id?: string };
     Layout: { id?: string };
+    Calculator: { id?: string };
+    Badgets: { id?: string };
 };
+export const ScreenNames = {
+    Home: 'Home',
+    Profile: 'Profile',
+    Calculator: 'Calculator',
+    Badgets: 'Badgets',
+} as const;
+export type ScreenName = keyof typeof ScreenNames;
