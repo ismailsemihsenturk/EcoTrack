@@ -1,26 +1,36 @@
 import { StyleSheet, Text, View } from 'react-native'
-import React, {useEffect} from 'react'
+import React, { useEffect } from 'react'
 import { createStackNavigator, StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../types/interfaces';
-import { useAppSelector,useAppDispatch } from '../utils/hooks';
+import { useAppSelector, useAppDispatch } from '../utils/hooks';
 import { RootState } from '../store';
-import { fetchTipsStart } from '../features/tipsSlice';
+import { addTip, fetchTips, fetchTipsStart } from '../features/tipsSlice';
+import { seedDatabase } from '../utils/seedDatabase';
 
 interface HomeScreenProps {
-    children: React.ReactNode;
-    navigation: StackNavigationProp<RootStackParamList, 'Home'>;
-  }
+  children: React.ReactNode;
+  navigation: StackNavigationProp<RootStackParamList, 'Home'>;
+}
 
-const Home:React.FC<HomeScreenProps> = ({navigation,children}) => {
+const Home: React.FC<HomeScreenProps> = ({ navigation, children }) => {
   const dispatch = useAppDispatch();
-  const { tips } = useAppSelector((state: RootState) => state.tips);
+  const { tips, loading, error } = useAppSelector((state: RootState) => state.tips);
   const { articles } = useAppSelector((state: RootState) => state.articles);
   const { unlockedAchievements } = useAppSelector((state: RootState) => state.achievements);
-  const { monthlyAverage, totalReduction } = useAppSelector((state: RootState) => state.carbon);
+  const { weeklyAverage, monthlyAverage, totalReduction } = useAppSelector((state: RootState) => state.carbon);
 
   useEffect(() => {
-    dispatch(fetchTipsStart());
+    dispatch(fetchTips());
+
   }, [dispatch]);
+
+  // useEffect(() => {
+  //     const seedDb = async() => {
+  //     await seedDatabase();
+  //   }
+  //   seedDb().catch(console.error);
+  // }, [])
+  // console.log('Tips in component:', tips);
 
   return (
     <View>

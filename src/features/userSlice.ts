@@ -3,7 +3,7 @@ import type { RootState } from '../store/index';
 import { UserState } from '../types/interfaces';
 
 const initialState: UserState = {
-  userId: '',
+  id: '',
   userName: 'İsmail Semih Şentürk',
   userEmail: 'senturkis98@hotmail.com',
   userPreferences: {

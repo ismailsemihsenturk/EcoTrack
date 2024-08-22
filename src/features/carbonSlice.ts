@@ -3,6 +3,7 @@ import { CarbonState, DailyFootprint } from '../types/interfaces';
 
 const initialState: CarbonState = {
   dailyFootprints: {},
+  weeklyAverage: 0,
   monthlyAverage: 0,
   totalReduction: 0,
   loading: false,
@@ -15,6 +16,9 @@ const carbonSlice = createSlice({
   reducers: {
     addDailyFootprint: (state, action: PayloadAction<DailyFootprint>) => {
       state.dailyFootprints[action.payload.date] = action.payload;
+    },
+    updateWeeklyAverage: (state, action: PayloadAction<number>) => {
+      state.weeklyAverage = action.payload;
     },
     updateMonthlyAverage: (state, action: PayloadAction<number>) => {
       state.monthlyAverage = action.payload;
@@ -39,6 +43,7 @@ const carbonSlice = createSlice({
 export const { 
   addDailyFootprint, 
   updateMonthlyAverage, 
+  updateWeeklyAverage, 
   updateTotalReduction,
   fetchCarbonDataStart,
   fetchCarbonDataSuccess,

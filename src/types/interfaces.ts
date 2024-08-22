@@ -5,7 +5,7 @@ export interface UserPreferences {
 }
 
 export interface UserState {
-  userId: string;
+  id: string;
   userName: string;
   userEmail: string;
   userPreferences: UserPreferences;
@@ -70,6 +70,7 @@ export interface DailyFootprint {
 
 export interface CarbonState {
   dailyFootprints: { [date: string]: DailyFootprint };
+  weeklyAverage: number;
   monthlyAverage: number;
   totalReduction: number;
   loading: boolean;

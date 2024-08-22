@@ -4,7 +4,7 @@ import { Tip, TipsState } from '../types/interfaces';
  
 
 const initialState: TipsState = {
-  tips: [],
+  tips: [] as Tip[],
   categories: [] as Array<'sustainability' | 'energy' | 'waste'>,
   loading: false,
   error: null,
@@ -61,7 +61,7 @@ const tipsSlice = createSlice({
       })
       .addCase(fetchTips.fulfilled, (state, action) => {
         state.loading = false;
-        state.tips = action.payload;
+        state.tips = [...state.tips, ...action.payload];
         state.categories = [
           ...new Set(
             action.payload
