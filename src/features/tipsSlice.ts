@@ -1,4 +1,5 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction,createAsyncThunk  } from '@reduxjs/toolkit';
+import { getTips } from '../services/firestore';
 import { Tip, TipsState } from '../types/interfaces';
  
 
@@ -8,6 +9,14 @@ const initialState: TipsState = {
   loading: false,
   error: null,
 };
+
+export const fetchTips = createAsyncThunk(
+  'tips/fetchTips',
+  async () => {
+    const response = await getTips();
+    return response;
+  }
+);
 
 const tipsSlice = createSlice({
   name: 'tips',
@@ -44,6 +53,29 @@ const tipsSlice = createSlice({
         state.categories.push(category as 'sustainability' | 'energy' | 'waste');
       }
     },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchTips.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(fetchTips.fulfilled, (state, action) => {
+        state.loading = false;
+        state.tips = action.payload;
+        state.categories = [
+          ...new Set(
+            action.payload
+              .map((tip) => tip.category)
+              .filter((category): category is 'sustainability' | 'energy' | 'waste' => 
+                ['sustainability', 'energy', 'waste'].includes(category)
+              )
+          ),
+        ];
+      })
+      .addCase(fetchTips.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message || null;
+      });
   },
 });
 
