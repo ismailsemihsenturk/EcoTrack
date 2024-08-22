@@ -24,7 +24,7 @@ export default function App() {
             <Stack.Screen name="Home" options={{ headerShown: false }}>
               {(props) => (
                 <Layout {...props}>
-                  <Home {...props} />
+                  <Home children={undefined} {...props} />
                 </Layout>
               )}
             </Stack.Screen>

@@ -7,10 +7,11 @@ import { RootState } from '../store';
 import { fetchTipsStart } from '../features/tipsSlice';
 
 interface HomeScreenProps {
+    children: React.ReactNode;
     navigation: StackNavigationProp<RootStackParamList, 'Home'>;
   }
 
-const Home:React.FC<HomeScreenProps> = ({navigation}) => {
+const Home:React.FC<HomeScreenProps> = ({navigation,children}) => {
   const dispatch = useAppDispatch();
   const { tips } = useAppSelector((state: RootState) => state.tips);
   const { articles } = useAppSelector((state: RootState) => state.articles);
