@@ -14,7 +14,7 @@ const carbonSlice = createSlice({
   initialState,
   reducers: {
     addDailyFootprint: (state, action: PayloadAction<DailyFootprint>) => {
-      state.dailyFootprints[action.payload.date] = action.payload.footprint;
+      state.dailyFootprints[action.payload.date] = action.payload;
     },
     updateMonthlyAverage: (state, action: PayloadAction<number>) => {
       state.monthlyAverage = action.payload;

@@ -26,10 +26,14 @@ const achievementsSlice = createSlice({
     },
     unlockAchievement: (state, action: PayloadAction<string>) => {
       const achievement = state.achievements.find(a => a.id === action.payload);
-      if (achievement && !state.unlockedAchievements.includes(achievement)) {
-        state.unlockedAchievements.push(achievement);
+      if (achievement && !state.unlockedAchievements.some(ua => ua.id === achievement.id)) {
+        const unlockedAchievement = {
+          ...achievement,
+          unlockedDate: new Date().toISOString(),
+        };
+        state.unlockedAchievements.push(unlockedAchievement);
       }
-    },
+    },    
   },
 });
 

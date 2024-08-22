@@ -8,7 +8,8 @@ const initialState: UserState = {
   userEmail: 'senturkis98@hotmail.com',
   userPreferences: {
     theme: 'light',
-    notificationsEnabled: false
+    notificationsEnabled: false,
+    language:"tr"
   },
   profilePicture: '',
   totalScore: 0,

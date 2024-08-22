@@ -35,7 +35,7 @@ const Layout: React.FC<LayoutProps> = ({ children, navigation }) => {
             console.error("Invalid page name");
         }
     };
-
+    
     useEffect(() => {
         if (isFocused) {
             setActiveButton(navigation.getState().routeNames[navigation.getState().index] as ScreenName);

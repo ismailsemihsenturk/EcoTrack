@@ -11,6 +11,7 @@ import Home from './screens/Home';
 import Profile from './screens/Profile';
 import Calculator from './screens/Calculator';
 import Badgets from './screens/Badgets';
+import { db } from '../firebase.config';
 
 
 const Stack = createStackNavigator<RootStackParamList>();
