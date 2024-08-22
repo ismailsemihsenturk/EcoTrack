@@ -1,27 +1,38 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { Tip,TipsState } from '../types/interfaces';
+import { Tip, TipsState } from '../types/interfaces';
 
 const initialState: TipsState = {
   tips: [],
-  tipCategories: [],
-  tipsSavedByUser: [],
+  categories: [],
+  loading: false,
+  error: null,
 };
 
 const tipsSlice = createSlice({
   name: 'tips',
   initialState,
   reducers: {
-    fetchTips: (state, action: PayloadAction<Tip[]>) => {
-      state.tips = action.payload;
-      state.tipCategories = [...new Set(action.payload.map((tip) => tip.category))];
+    fetchTipsStart: (state) => {
+      state.loading = true;
+      state.error = null;
     },
-    saveTipByUser: (state, action: PayloadAction<string>) => {
-      if (!state.tipsSavedByUser.includes(action.payload)) {
-        state.tipsSavedByUser.push(action.payload);
+    fetchTipsSuccess: (state, action: PayloadAction<Tip[]>) => {
+      state.tips = action.payload;
+      state.categories = [...new Set(action.payload.map((tip) => tip.category))];
+      state.loading = false;
+    },
+    fetchTipsFailure: (state, action: PayloadAction<string>) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
+    addTip: (state, action: PayloadAction<Tip>) => {
+      state.tips.push(action.payload);
+      if (!state.categories.includes(action.payload.category)) {
+        state.categories.push(action.payload.category);
       }
     },
   },
 });
 
-export const { fetchTips, saveTipByUser } = tipsSlice.actions;
+export const { fetchTipsStart, fetchTipsSuccess, fetchTipsFailure, addTip } = tipsSlice.actions;
 export default tipsSlice.reducer;

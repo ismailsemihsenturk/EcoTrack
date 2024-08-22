@@ -1,13 +1,18 @@
-import { createSlice,PayloadAction  } from '@reduxjs/toolkit'
-import type { RootState } from '../store/index'
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import type { RootState } from '../store/index';
 import { UserState } from '../types/interfaces';
-
 
 const initialState: UserState = {
   userId: '',
   userName: 'İsmail Semih Şentürk',
   userEmail: 'senturkis98@hotmail.com',
-  userPreferences: {},
+  userPreferences: {
+    theme: 'light',
+    notificationsEnabled: false
+  },
+  profilePicture: '',
+  totalScore: 0,
+  ranking: 0,
 };
 
 const userSlice = createSlice({
@@ -15,20 +20,19 @@ const userSlice = createSlice({
   initialState,
   reducers: {
     setUserData: (state, action: PayloadAction<Partial<UserState>>) => {
-      state.userId = action.payload.userId || state.userId;
-      state.userName = action.payload.userName || state.userName;
-      state.userEmail = action.payload.userEmail || state.userEmail;
-      state.userPreferences = {
-        ...state.userPreferences,
-        ...(action.payload.userPreferences || {}),
-      };
+      return { ...state, ...action.payload };
+    },
+    updateScore: (state, action: PayloadAction<number>) => {
+      state.totalScore += action.payload;
+    },
+    updateRanking: (state, action: PayloadAction<number>) => {
+      state.ranking = action.payload;
     },
   },
 });
 
-export const { setUserData } = userSlice.actions
+export const { setUserData, updateScore, updateRanking } = userSlice.actions;
 
-// Other code such as selectors can use the imported `RootState` type
-export const selectUserId = (state: RootState) => state.user.userId
+export const selectUser = (state: RootState) => state.user;
 
-export default userSlice.reducer
+export default userSlice.reducer;
