@@ -55,3 +55,4 @@ Follow these steps to set up the project locally.
 - └── package.json        # Dependencies
 
 
+![CI](https://github.com/[YOUR_USERNAME]/[YOUR_REPO_NAME]/workflows/CI/badge.svg)
