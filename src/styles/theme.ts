@@ -9,7 +9,8 @@ export const theme = {
     background: '#F1F8E9', // Açık yeşil
     text: '#FFFFFF', // Koyu gri
     secondary_text:'#404642',
-    border:'#3E903E'
+    border:'#3E903E',
+    logout:"#404642"
   },
   typography: {
     fontFamily: 'Roboto, sans-serif',

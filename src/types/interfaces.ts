@@ -14,6 +14,11 @@ export interface UserState {
   ranking: number;
 }
 
+export interface CustomUser {
+  uid: string;
+  email: string | null;
+  displayName: string | null;
+}
 export interface Tip {
   id: string;
   title: string;
@@ -89,13 +94,18 @@ export type RootStackParamList = {
   Calculator: { id?: string };
   Badgets: { achievementId?: string };
   Profile: { userId?: string; profilePicture?: string };
-  Layout: { id?: string }
+  Layout: { id?: string };
+  Login: { id?: string };
+  Register: { id?: string };
 };
-
+import { StackNavigationProp } from '@react-navigation/stack';
+export type NavigationProp = StackNavigationProp<RootStackParamList>;
 export const ScreenNames = {
   Home: 'Home',
   Calculator: 'Calculator',
   Badgets: 'Badgets',
   Profile: 'Profile',
+  Login: 'Login',
+  Register: 'Register',
 } as const;
 export type ScreenName = keyof typeof ScreenNames;

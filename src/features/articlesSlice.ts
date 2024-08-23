@@ -1,11 +1,20 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction,createAsyncThunk } from '@reduxjs/toolkit';
 import { Article, ArticlesState } from '../types/interfaces';
+import { getArticles } from '../services/firestore';
 
 const initialState: ArticlesState = {
-  articles: [],
+  articles: [] as Article[],
   loading: false,
   error: null,
 };
+
+export const fetchArticles = createAsyncThunk(
+  'tips/fetchTips',
+  async () => {
+    const response = await getArticles();
+    return response;
+  }
+);
 
 const articlesSlice = createSlice({
   name: 'articles',
@@ -26,6 +35,20 @@ const articlesSlice = createSlice({
     addArticle: (state, action: PayloadAction<Article>) => {
       state.articles.push(action.payload);
     },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchArticles.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(fetchArticles.fulfilled, (state, action) => {
+        state.loading = false;
+        state.articles = [...state.articles, ...action.payload];
+      })
+      .addCase(fetchArticles.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message || null;
+      });
   },
 });
 

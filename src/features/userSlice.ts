@@ -4,12 +4,12 @@ import { UserState } from '../types/interfaces';
 
 const initialState: UserState = {
   id: '',
-  userName: 'İsmail Semih Şentürk',
-  userEmail: 'senturkis98@hotmail.com',
+  userName: '',
+  userEmail: '',
   userPreferences: {
     theme: 'light',
     notificationsEnabled: false,
-    language:"tr"
+    language: "tr"
   },
   profilePicture: '',
   totalScore: 0,

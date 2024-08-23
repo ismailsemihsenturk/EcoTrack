@@ -1,42 +1,60 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React, { useEffect } from 'react'
-import { createStackNavigator, StackNavigationProp } from '@react-navigation/stack';
-import { RootStackParamList } from '../types/interfaces';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { RootStackParamList, UserState } from '../types/interfaces';
 import { useAppSelector, useAppDispatch } from '../utils/hooks';
 import { RootState } from '../store';
-import { addTip, fetchTips, fetchTipsStart } from '../features/tipsSlice';
-import { seedDatabase } from '../utils/seedDatabase';
+import { fetchTips } from '../features/tipsSlice';
+import { fetchArticles } from '../features/articlesSlice';
+import { useAuth } from '../services/authContext';
+import { User } from 'firebase/auth';
+import { getUser } from '../services/firestore';
+import { setUserData } from '../features/userSlice';
 
 interface HomeScreenProps {
-  children: React.ReactNode;
+  children: User | null;
   navigation: StackNavigationProp<RootStackParamList, 'Home'>;
 }
 
 const Home: React.FC<HomeScreenProps> = ({ navigation, children }) => {
+  const { user, loading } = useAuth();
   const dispatch = useAppDispatch();
-  const { tips, loading, error } = useAppSelector((state: RootState) => state.tips);
-  const { articles } = useAppSelector((state: RootState) => state.articles);
+  const { tips, loading: tipsLoading, error: tipsError } = useAppSelector((state: RootState) => state.tips);
+  const userRedux = useAppSelector((state: RootState) => state.user);
+  const { articles, loading: articlesLoading, error: articlesError } = useAppSelector((state: RootState) => state.articles);
   const { unlockedAchievements } = useAppSelector((state: RootState) => state.achievements);
   const { weeklyAverage, monthlyAverage, totalReduction } = useAppSelector((state: RootState) => state.carbon);
 
   useEffect(() => {
     dispatch(fetchTips());
-
+    dispatch(fetchArticles());
   }, [dispatch]);
 
-  // useEffect(() => {
-  //     const seedDb = async() => {
-  //     await seedDatabase();
-  //   }
-  //   seedDb().catch(console.error);
-  // }, [])
-  // console.log('Tips in component:', tips);
+useEffect(() =>{
+  const loginWithToken = async () => {
+    try {
+      if(user){
+        const reduxUser = await getUser(user.uid);
+        if (reduxUser) {
+          dispatch(setUserData(reduxUser));
+        }
+      }  
+    } catch (error) {
+      console.error('Login error:', error);
+    }
+  };
+loginWithToken()
+},[user])
+
+  if (loading) {
+    return <Text>Loading...</Text>;
+  }
 
   return (
     <View>
-      <Text>Home:React</Text>
+      {user ? <Text>Welcome, {userRedux.userName}</Text> : <Text>Please sign in</Text>}
     </View>
-  )
+  );
 }
 
 export default Home

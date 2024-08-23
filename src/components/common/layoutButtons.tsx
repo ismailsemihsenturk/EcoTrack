@@ -55,6 +55,6 @@ const styles = StyleSheet.create({
       fontWeight: theme.typography.fontWeight.medium as FontWeight,
     },
     lastButton: {
-        borderRightWidth: 0, // Son buton için sağ kenar çizgisi kaldırılıyor
+        borderRightWidth: 0, 
       },
   });
