@@ -54,5 +54,3 @@ Follow these steps to set up the project locally.
 - ├── index.js            # Main
 - └── package.json        # Dependencies
 
-
-![CI](https://github.com/[ismailsemihsenturk]/[EcoTrack]/workflows/CI/badge.svg)
