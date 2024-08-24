@@ -53,4 +53,4 @@ export default [
 //   'react/prop-types': 2,
 //   'react/react-in-jsx-scope': 2,
 //   'react/require-render-return': 2,
-// },
+// }
