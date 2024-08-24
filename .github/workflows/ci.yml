@@ -30,7 +30,7 @@ jobs:
       run: npm ci
 
     - name: Run ESLint
-      run: eslint .
+      run: npx eslint .
 
     - name: Run Jest tests with coverage
       run: npm test --coverage
