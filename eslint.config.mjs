@@ -2,13 +2,14 @@ import globals from "globals";
 import pluginJs from "@eslint/js";
 import tsPlugin from "@typescript-eslint/eslint-plugin";
 import pluginReact from "eslint-plugin-react";
+import tsParser from "@typescript-eslint/parser";
 
 export default [
   {
     files: ["**/*.{js,mjs,cjs,ts,jsx,tsx}"],
     languageOptions: {
       globals: globals.browser,
-      parser: "@typescript-eslint/parser",
+      parser: tsParser,
       parserOptions: {
         ecmaVersion: 2020,
         sourceType: "module",
@@ -18,7 +19,6 @@ export default [
       'no-unused-vars': 'off',
       'react/prop-types': 'off',
       'react/jsx-no-undef': 'off',
-      // Add other rules as needed
       '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
     },
   },
@@ -26,6 +26,7 @@ export default [
   pluginReact.configs.flat.recommended,
   tsPlugin.configs.recommended,
 ];
+
 
 
 
