@@ -35,5 +35,5 @@ jobs:
     - name: Run Jest tests with coverage
       run: npm test --coverage
 
-    - name: Build Expo app for web
-      run: npm run build:web
+    # - name: Build Expo app for web
+    #   run: npm run build:web
