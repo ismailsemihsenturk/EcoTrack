@@ -34,6 +34,7 @@ const Calculator: React.FC<CalculatorScreenProps> = ({ navigation }) => {
     setTransport("")
     setEnergy("")
     setFood("")
+    navigation.navigate("Badgets",{})
   };
 
   return (
