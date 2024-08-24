@@ -1,9 +1,7 @@
 import globals from "globals";
 import pluginJs from "@eslint/js";
-import { ESLint } from "eslint";
+import tsPlugin from "@typescript-eslint/eslint-plugin";
 import pluginReact from "eslint-plugin-react";
-
-const tsPlugin = ESLint.getFormatter('typescript-eslint');
 
 export default [
   {
@@ -20,26 +18,13 @@ export default [
       'no-unused-vars': 'off',
       'react/prop-types': 'off',
       'react/jsx-no-undef': 'off',
+      // Add other rules as needed
+      '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
     },
   },
   pluginJs.configs.recommended,
-  // Adding TypeScript ESLint configuration manually
-  {
-    languageOptions: {
-      parser: '@typescript-eslint/parser',
-      parserOptions: {
-        ecmaVersion: 2020,
-        sourceType: 'module',
-      },
-      globals: globals.browser,
-    },
-    rules: {
-      '@typescript-eslint/explicit-module-boundary-types': 'off',
-      '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
-      // Add additional TypeScript-specific rules here
-    },
-  },
   pluginReact.configs.flat.recommended,
+  tsPlugin.configs.recommended,
 ];
 
 
