@@ -12,7 +12,7 @@ import Calculator from './screens/Calculator';
 import Badgets from './screens/Badgets';
 import { AuthProvider } from './services/authContext';
 import { getAuth, onAuthStateChanged, User, signInWithCustomToken } from 'firebase/auth';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Login from './screens/login';
 import Register from './screens/register';
 import AsyncStorage from '@react-native-async-storage/async-storage';
