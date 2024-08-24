@@ -70,8 +70,12 @@ export interface AchievementsState {
 export interface DailyFootprint {
   id: string,
   date: string;
-  footprint: number;
+  transport: number;
+  energy: number;
+  food: number;
+  dailyTotalFootprint: number;
 }
+
 
 export interface CarbonState {
   dailyFootprints: { [date: string]: DailyFootprint };

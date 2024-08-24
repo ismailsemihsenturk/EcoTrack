@@ -35,16 +35,27 @@ export const getAchievements = async (): Promise<Achievement[]> => {
 
 export const saveDailyFootprint = async (userId: string, footprint: DailyFootprint): Promise<void> => {
   try {
-    await addDoc(collection(db, 'users', userId, 'footprints'), footprint);
+    const footprintToSave = {
+      ...footprint,
+      id: userId, 
+      date: Date.now(),
+    };
+    const userRef = doc(db, 'users', userId);
+    const footprintsRef = collection(userRef, 'footprints'); 
+    await addDoc(footprintsRef, footprintToSave);
   } catch (error) {
     console.log("error: " + error);
   }
 };
 
+
 export const getUserFootprints = async (userId: string): Promise<DailyFootprint[]> => {
   try {
     const snapshot = await getDocs(collection(db, 'users', userId, 'footprints'));
-    return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as DailyFootprint));
+    return snapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data(),
+    }) as DailyFootprint);
   } catch (error) {
     console.log("error: " + error);
     return [];
