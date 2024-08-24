@@ -5,9 +5,10 @@ EcoTracker is a mobile application that helps you track your environmental footp
 ## Features
 
 - **Carbon Footprint Calculation**: Track your carbon footprint by logging daily activities.
+- **Read Articles**: You can read articles about environment.
 - **Eco-Friendly Tips**: Receive tips and suggestions to help you adopt more sustainable habits.
 - **Daily Tracking**: Monitor your progress on a daily, weekly, and monthly basis.
-- **Notifications**: Get reminders to maintain a more sustainable lifestyle.
+- **Unlock Achievements**: Get achievements based on your tracking calculations.
 
 ## Requirements
 
@@ -37,7 +38,8 @@ Follow these steps to set up the project locally.
 
 
 ## Project Structure
- 
+
+- ├── __tests__           # test files (github actions)
 - ├── src
 - │   ├── assets          # Images, fonts, etc.
 - │   ├── components      # App components
