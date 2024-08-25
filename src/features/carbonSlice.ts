@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
 import { CarbonState, DailyFootprint } from '../types/interfaces';
-import { saveDailyFootprint, getUserFootprints } from '../services/firestore';
+import { saveDailyFootprint, getUserFootprints, updateLeaderboard } from '../services/firestore';
 import { updateTotalFootprintAndCheckAchievements } from './achievementSlice';
 
 const initialState: CarbonState = {
@@ -12,11 +12,23 @@ const initialState: CarbonState = {
   error: null,
 };
 
-export const fetchFootprints = createAsyncThunk(
-  'carbon/fetchFootprints',
-  async (userId: string) => {
-    const response = await getUserFootprints(userId);
-    return response;
+// export const fetchFootprints = createAsyncThunk(
+//   'carbon/fetchFootprints',
+//   async (userId: string) => {
+//     const response = await getUserFootprints(userId);
+//     return response;
+//   }
+// );
+
+export const fetchUserFootprintHistory = createAsyncThunk(
+  'carbon/fetchUserFootprintHistory',
+  async ({ userId, startDate, endDate }: { userId: string; startDate: Date; endDate: Date }, { rejectWithValue }) => {
+    try {
+      const footprints = await getUserFootprints(userId, startDate, endDate);
+      return footprints;
+    } catch (error) {
+      return rejectWithValue('Failed to fetch user footprint history');
+    }
   }
 );
 
@@ -26,7 +38,7 @@ export const addFootprintAndCalculate = createAsyncThunk(
     await saveDailyFootprint(params.userId, params.footprint);
     dispatch(addDailyFootprint(params.footprint));
 
-    const state = getState() as { carbon: CarbonState };
+    const state = getState() as { carbon: CarbonState; user: { userName: string } };
     const footprints = Object.values(state.carbon.dailyFootprints);
 
     // Calculate weekly average
@@ -46,6 +58,19 @@ export const addFootprintAndCalculate = createAsyncThunk(
       ? footprints[0].dailyTotalFootprint - footprints[footprints.length - 1].dailyTotalFootprint
       : 0;
 
+    // Calculate total footprints
+    const totalFootprint = footprints.reduce((sum, f) => sum + f.dailyTotalFootprint, 0);
+    const energyFootprint = footprints.reduce((sum, f) => sum + f.energy, 0);
+    const foodFootprint = footprints.reduce((sum, f) => sum + f.food, 0);
+    const wasteFootprint = footprints.reduce((sum, f) => sum + (f.transport || 0), 0); // Assuming transport is waste
+
+    // Update leaderboard
+    await updateLeaderboard(params.userId, {
+      totalFootprint,
+      energyFootprint,
+      foodFootprint,
+      wasteFootprint
+    }, state.user.userName);
 
     dispatch(updateTotalFootprintAndCheckAchievements({
       userId: params.userId,
@@ -75,17 +100,17 @@ const carbonSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(fetchFootprints.pending, (state) => {
+      .addCase(fetchUserFootprintHistory.pending, (state) => {
         state.loading = true;
       })
-      .addCase(fetchFootprints.fulfilled, (state, action: PayloadAction<DailyFootprint[]>) => {
+      .addCase(fetchUserFootprintHistory.fulfilled, (state, action: PayloadAction<DailyFootprint[]>) => {
         state.loading = false;
         state.dailyFootprints = action.payload.reduce((acc, footprint) => {
           acc[footprint.date] = footprint;
           return acc;
         }, {} as { [date: string]: DailyFootprint });
       })
-      .addCase(fetchFootprints.rejected, (state, action) => {
+      .addCase(fetchUserFootprintHistory.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message || null;
       })

@@ -12,6 +12,8 @@ export interface UserState {
   profilePicture?: string;
   totalScore: number;
   ranking: number;
+  loading?: boolean | null,
+  error?: string | null,
 }
 
 export interface CustomUser {
@@ -49,11 +51,11 @@ export interface ArticlesState {
 
 export interface Achievement {
   id: string;
-  title: string; 
+  title: string;
   description: string;
   imageUrl: string;
-  requiredFootprint: number;  
-  category?: string;  
+  requiredFootprint: number;
+  category?: string;
 }
 
 export interface UnlockedAchievement extends Achievement {
@@ -93,12 +95,30 @@ export interface CarbonState {
   error: string | null;
 }
 
+export interface LeaderboardEntry {
+  userId: string;
+  userName: string;
+  totalFootprint: number;
+  energyFootprint: number;
+  foodFootprint: number;
+  wasteFootprint: number;
+  rank: number;
+}
+
+export interface LeaderboardState {
+  entries: LeaderboardEntry[];
+  userRank: number;
+  loading: boolean;
+  error: string | null;
+}
+
 export interface RootState {
   user: UserState;
   tips: TipsState;
   articles: ArticlesState;
   achievements: AchievementsState;
   carbon: CarbonState;
+  leaderboard: LeaderboardState;
 }
 export type RootStackParamList = {
   Home: { userId?: string };

@@ -1,6 +1,6 @@
-import { collection, getDocs, addDoc, doc, setDoc, getDoc } from 'firebase/firestore';
+import { collection, getDocs, addDoc, doc, setDoc, getDoc, query, orderBy, where, limit, Timestamp } from 'firebase/firestore';
 import { db } from '../../firebase.config';
-import { Tip, Article, Achievement, DailyFootprint, UserState, CustomUser, TotalUserFootPrint, UnlockedAchievement } from '../types/interfaces';
+import { Tip, Article, Achievement, DailyFootprint, UserState, CustomUser, TotalUserFootPrint, UnlockedAchievement, LeaderboardEntry } from '../types/interfaces';
 
 export const getTips = async (): Promise<Tip[]> => {
   try {
@@ -114,18 +114,25 @@ export const saveDailyFootprint = async (userId: string, footprint: DailyFootpri
 };
 
 
-export const getUserFootprints = async (userId: string): Promise<DailyFootprint[]> => {
+export const getUserFootprints = async (userId: string, startDate: Date, endDate: Date): Promise<DailyFootprint[]> => {
   try {
-    const snapshot = await getDocs(collection(db, 'users', userId, 'footprints'));
-    return snapshot.docs.map(doc => ({
-      id: doc.id,
-      ...doc.data(),
-    }) as DailyFootprint);
+
+    const startDateTimestamp = startDate.getTime(); // Convert to milliseconds
+    const endDateTimestamp = endDate.getTime();     // Convert to milliseconds
+
+    const snapshot = await getDocs(query(
+      collection(db, 'users', userId, 'footprints'),
+      where('date', '>=', startDateTimestamp),
+      where('date', '<=', endDateTimestamp),
+      orderBy('date')
+    ));
+    return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as DailyFootprint));
   } catch (error) {
-    console.log("error: " + error);
+    console.error("Error fetching user footprint history: ", error);
     return [];
   }
 };
+
 
 export const addUser = async (user: UserState): Promise<void> => {
   try {
@@ -201,3 +208,97 @@ export const getUserViaAsyncStorage = async (userId: string): Promise<CustomUser
     return null;
   }
 };
+
+
+export const getLeaderboard = async (limitValue: number = 10): Promise<LeaderboardEntry[]> => {
+  try {
+    const q = query(
+      collection(db, 'leaderboard'),
+      orderBy('totalFootprint'),
+      limit(limitValue)
+    );
+
+    const snapshot = await getDocs(q);
+    return snapshot.docs.map(doc => ({ userId: doc.id, ...doc.data() } as LeaderboardEntry));
+  } catch (error) {
+    console.error("Error fetching leaderboard: ", error);
+    return [];
+  }
+};
+
+export const updateLeaderboard = async (userId: string, footprints: {
+  totalFootprint: number,
+  energyFootprint: number,
+  foodFootprint: number,
+  wasteFootprint: number
+}, userName: string) => {
+  try {
+    await setDoc(doc(db, 'leaderboard', userId), {
+      ...footprints,
+      userName
+    }, { merge: true });
+  } catch (error) {
+    console.error("Error updating leaderboard: ", error);
+  }
+};
+
+export const getRankFromLeaderBoard = async (userName: string): Promise<number> => {
+  try {
+    // Fetch all documents sorted by totalFootprint in descending order
+    const snapshot = await getDocs(query(
+      collection(db, 'leaderboard'),
+      orderBy('totalFootprint', 'desc')
+    ));
+
+    // Convert documents to an array of LeaderboardEntry
+    const leaderboardEntries: LeaderboardEntry[] = snapshot.docs.map(doc => ({
+      ...(doc.data() as LeaderboardEntry),
+      userId: doc.id,
+      rank: 0,
+    }));
+    // Find the user's score
+    const userEntry = leaderboardEntries.find(entry => entry.userName === userName);
+    if (!userEntry) return 0; // User not found
+
+    // Determine the rank based on the score
+    const rank = leaderboardEntries
+      .filter(entry => entry.totalFootprint > userEntry.totalFootprint) // Filter out entries with higher footprints
+      .length + 1;
+
+    return rank;
+  } catch (error) {
+    console.error("Error getting rank from leaderboard: ", error);
+    return 0;
+  }
+};
+
+export const updateUserScoreandRank = async (userId: string, userName: string): Promise<UserState | null> => {
+  try {
+
+    const docRef = doc(db, "leaderboard", userId);
+    const docSnap = await getDoc(docRef);
+
+    if (docSnap.exists()) {
+      const totalFootprint = docSnap.data().totalFootprint;
+      const rank = await getRankFromLeaderBoard(userName);
+
+      await setDoc(doc(db, 'users', userId), {
+        totalScore: totalFootprint,
+        ranking: rank,
+      }, { merge: true });
+      const snapshot = await getDoc(doc(db, 'users', userId))
+      if (snapshot.exists()) {
+        return snapshot.data() as UserState;
+      }
+      else {
+        console.warn('Document not found after update (should not happen)');
+        return null;
+      }
+    } else {
+      return null;
+    }
+  } catch (error) {
+    console.error("Error updating score and rank: ", error);
+    return null;
+  }
+}

@@ -4,6 +4,7 @@ import tipsReducer from '../features/tipsSlice'
 import articlesReducer from '../features/articlesSlice'
 import achievementsReducer from '../features/achievementSlice'
 import carbonReducer from '../features/carbonSlice'
+import leaderboardReducer from '../features/leaderboardSlice'
 
 const store = configureStore({
   reducer: {
@@ -12,6 +13,7 @@ const store = configureStore({
     articles: articlesReducer,
     achievements: achievementsReducer,
     carbon: carbonReducer,
+    leaderboard: leaderboardReducer,
   },
 });
 
