@@ -18,6 +18,7 @@ const Badgets: React.FC<BadgetsScreenProps> = ({ navigation }) => {
     dispatch(fetchAchievements(user.id));
   }, [dispatch, user.id]);
 
+  const sortedAchievements = achievements.slice().sort((a, b) => a.requiredFootprint - b.requiredFootprint);
   const renderAchievement = (achievement: Achievement) => {
     const isUnlocked = unlockedAchievements.some(ua => ua.id === achievement.id);
     return (
@@ -36,7 +37,7 @@ const Badgets: React.FC<BadgetsScreenProps> = ({ navigation }) => {
       <Text style={styles.title}>Achievements</Text>
       <Text style={styles.totalFootprint}>Total Footprint: {totalFootPrint?.totalFootprint || 0} kg CO2</Text>
       <View style={styles.achievementsContainer}>
-        {achievements.map(renderAchievement)}
+        {sortedAchievements.map(renderAchievement)}
       </View>
     </ScrollView>
   );

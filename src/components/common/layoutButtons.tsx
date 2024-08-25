@@ -12,7 +12,6 @@ interface ButtonProps {
 
 const Button: React.FC<ButtonProps> = ({ children, onPress, isActive, style }) => {
   const handlePress = () => {
-    console.log(children)
     onPress(children);
   };
 
