@@ -21,6 +21,14 @@ const Profile: React.FC<ProfileScreenProps> = ({ route }) => {
   const footprintHistory = useAppSelector((state) => state.carbon.dailyFootprints);
 
   const [chartTimeframe, setChartTimeframe] = useState<'daily' | 'weekly' | 'monthly'>('daily');
+  const [sortedLeaderboard, setSortedLeaderboard] = useState<LeaderboardEntry[]>([]);
+
+  useEffect(() => {
+    // Create a new array by copying the leaderboard
+    const sortedBoard = [...leaderboard].sort((a, b) => b.totalFootprint - a.totalFootprint);
+    setSortedLeaderboard(sortedBoard);
+  }, [leaderboard]);
+
 
   useEffect(() => {
     dispatch(fetchLeaderboardData());
@@ -72,7 +80,7 @@ const Profile: React.FC<ProfileScreenProps> = ({ route }) => {
 
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>Global Leaderboard</Text>
-        {leaderboard.map((item, index) => (
+        {sortedLeaderboard.map((item, index) => (
           renderLeaderboardItem({ item, index })
         ))}
       </View>
