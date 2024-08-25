@@ -18,7 +18,7 @@ export const getArticles = async (): Promise<Article[]> => {
     return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Article));
   } catch (error) {
     console.log("error: " + error);
-    return  [];
+    return [];
   }
 };
 
@@ -35,13 +35,16 @@ export const getAchievements = async (): Promise<Achievement[]> => {
 
 export const getUserUnlockedAchievements = async (userId: string): Promise<UnlockedAchievement[]> => {
   try {
-    const snapshot = await getDocs(collection(db, 'users', userId, 'unlockedAchievements'));
+    const userRef = doc(db, 'users', userId);
+    const unlockedAchievementsRef = collection(userRef, 'unlockedAchievements');
+    const snapshot = await getDocs(unlockedAchievementsRef);
     return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as UnlockedAchievement));
   } catch (error) {
-    console.log("error: " + error);
+    console.log("error: ", error);
     return [];
   }
 };
+
 
 export const unlockUserAchievement = async (userId: string, achievementId: string): Promise<void> => {
   try {
@@ -72,6 +75,7 @@ export const updateTotalUserFootPrint = async (userId: string, newFootprint: num
   }
 };
 
+
 export const getTotalUserFootPrint = async (userId: string): Promise<TotalUserFootPrint | null> => {
   try {
     const globalFootprintRef = doc(db, 'footprints', userId);
@@ -98,11 +102,11 @@ export const saveDailyFootprint = async (userId: string, footprint: DailyFootpri
   try {
     const footprintToSave = {
       ...footprint,
-      id: userId, 
+      id: userId,
       date: Date.now(),
     };
     const userRef = doc(db, 'users', userId);
-    const footprintsRef = collection(userRef, 'footprints'); 
+    const footprintsRef = collection(userRef, 'footprints');
     await addDoc(footprintsRef, footprintToSave);
   } catch (error) {
     console.log("error: " + error);
