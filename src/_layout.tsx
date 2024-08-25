@@ -25,8 +25,7 @@ const Layout: React.FC<LayoutProps> = ({ children, navigation }) => {
     const [activeButton, setActiveButton] = useState<ScreenName | null>("Home");
     const isFocused = useIsFocused();
 
-    const handleButtonPress = (button: Partial<React.ReactNode>) => {
-        let pageName = button as ScreenName
+    const handleButtonPress = (pageName: ScreenName) => {
         setActiveButton(pageName);
         handleNavigation(pageName)
     };
@@ -41,9 +40,11 @@ const Layout: React.FC<LayoutProps> = ({ children, navigation }) => {
 
     useEffect(() => {
         if (isFocused) {
-            setActiveButton(navigation.getState().routeNames[navigation.getState().index] as ScreenName);
+            const currentRouteName = navigation.getState().routes[navigation.getState().index].name as ScreenName;
+            setActiveButton(currentRouteName);
         }
-    }, [isFocused]);
+    }, [isFocused, navigation]);
+
 
     const handleLogout = async () => {
         try {
@@ -60,14 +61,14 @@ const Layout: React.FC<LayoutProps> = ({ children, navigation }) => {
             <View style={[styles.container, { paddingTop: safeAreaTop }]}>
                 <View style={styles.header}>
                     <Text style={styles.headerText}>Welcome, {userName}</Text>
-                    <Pressable style={styles.headerLogout}  onPress={handleLogout}><Text >Logout</Text></Pressable>
+                    <Pressable style={styles.headerLogout} onPress={handleLogout}><Text >Logout</Text></Pressable>
                 </View>
                 <View style={styles.content}>{children}</View>
                 <View style={styles.footer}>
-                    <Button children={"Home"} onPress={handleButtonPress} isActive={activeButton?.toString()} style={styles.lastButton} />
-                    <Button children={"Calculator"} onPress={handleButtonPress} isActive={activeButton?.toString()} style={styles.lastButton} />
-                    <Button children={"Badgets"} onPress={handleButtonPress} isActive={activeButton?.toString()} style={styles.lastButton} />
-                    <Button children={"Profile"} onPress={handleButtonPress} isActive={activeButton?.toString()} />
+                    <Button children="Home" onPress={handleButtonPress} isActive={activeButton?.toString()} style={styles.lastButton} />
+                    <Button children="Calculator" onPress={handleButtonPress} isActive={activeButton?.toString()} style={styles.lastButton} />
+                    <Button children="Badgets" onPress={handleButtonPress} isActive={activeButton?.toString()} style={styles.lastButton} />
+                    <Button children="Profile" onPress={handleButtonPress} isActive={activeButton?.toString()} />
                 </View>
             </View>
         </ThemeProvider>
@@ -86,7 +87,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-    
+
     },
     headerText: {
         color: theme.colors.text,
