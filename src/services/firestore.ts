@@ -1,7 +1,6 @@
 import { collection, getDocs, addDoc, doc, setDoc, getDoc } from 'firebase/firestore';
 import { db } from '../../firebase.config';
-import { Tip, Article, Achievement, DailyFootprint, UserState, CustomUser } from '../types/interfaces';
-import { IdTokenResult, User } from '@firebase/auth';
+import { Tip, Article, Achievement, DailyFootprint, UserState, CustomUser, TotalUserFootPrint, UnlockedAchievement } from '../types/interfaces';
 
 export const getTips = async (): Promise<Tip[]> => {
   try {
@@ -23,6 +22,7 @@ export const getArticles = async (): Promise<Article[]> => {
   }
 };
 
+
 export const getAchievements = async (): Promise<Achievement[]> => {
   try {
     const snapshot = await getDocs(collection(db, 'achievements'));
@@ -30,6 +30,67 @@ export const getAchievements = async (): Promise<Achievement[]> => {
   } catch (error) {
     console.log("error: " + error);
     return [];
+  }
+};
+
+export const getUserUnlockedAchievements = async (userId: string): Promise<UnlockedAchievement[]> => {
+  try {
+    const snapshot = await getDocs(collection(db, 'users', userId, 'unlockedAchievements'));
+    return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as UnlockedAchievement));
+  } catch (error) {
+    console.log("error: " + error);
+    return [];
+  }
+};
+
+export const unlockUserAchievement = async (userId: string, achievementId: string): Promise<void> => {
+  try {
+    const achievementRef = doc(db, 'achievements', achievementId);
+    const achievementDoc = await getDoc(achievementRef);
+    if (achievementDoc.exists()) {
+      const achievement = { id: achievementDoc.id, ...achievementDoc.data() } as Achievement;
+      await setDoc(doc(db, 'users', userId, 'unlockedAchievements', achievementId), {
+        ...achievement,
+        unlockedDate: new Date().toISOString(),
+      });
+    }
+  } catch (error) {
+    console.log("error: " + error);
+  }
+};
+
+export const updateTotalUserFootPrint = async (userId: string, newFootprint: number): Promise<void> => {
+  try {
+    const TotalUserFootPrintRef = doc(db, 'footprints', userId);
+    await setDoc(TotalUserFootPrintRef, {
+      userId,
+      totalFootprint: newFootprint,
+      lastUpdated: new Date().toISOString()
+    }, { merge: true });
+  } catch (error) {
+    console.log("error: " + error);
+  }
+};
+
+export const getTotalUserFootPrint = async (userId: string): Promise<TotalUserFootPrint | null> => {
+  try {
+    const globalFootprintRef = doc(db, 'footprints', userId);
+    const globalFootprintDoc = await getDoc(globalFootprintRef);
+    if (globalFootprintDoc.exists()) {
+      return globalFootprintDoc.data() as TotalUserFootPrint;
+    }
+    return null;
+  } catch (error) {
+    console.log("error: " + error);
+    return null;
+  }
+};
+
+export const updateTotalFootprint = async (userId: string, totalFootprint: number): Promise<void> => {
+  try {
+    await setDoc(doc(db, 'footprints', userId), { totalFootprint }, { merge: true });
+  } catch (error) {
+    console.log("error: " + error);
   }
 };
 

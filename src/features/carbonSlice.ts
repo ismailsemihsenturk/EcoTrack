@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
 import { CarbonState, DailyFootprint } from '../types/interfaces';
 import { saveDailyFootprint, getUserFootprints } from '../services/firestore';
+import { updateTotalFootprintAndCheckAchievements } from './achievementSlice';
 
 const initialState: CarbonState = {
   dailyFootprints: {},
@@ -44,6 +45,12 @@ export const addFootprintAndCalculate = createAsyncThunk(
     const totalReduction = footprints.length > 1
       ? footprints[0].dailyTotalFootprint - footprints[footprints.length - 1].dailyTotalFootprint
       : 0;
+
+
+    dispatch(updateTotalFootprintAndCheckAchievements({
+      userId: params.userId,
+      newFootprint: params.footprint.dailyTotalFootprint
+    }));
 
     return { weeklyAverage, monthlyAverage, totalReduction };
   }

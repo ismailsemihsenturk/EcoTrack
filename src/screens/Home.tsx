@@ -10,6 +10,7 @@ import { useAuth } from '../services/authContext';
 import { User } from 'firebase/auth';
 import { getUser } from '../services/firestore';
 import { setUserData } from '../features/userSlice';
+import { seedDatabase } from '../utils/seedDatabase';
 
 interface HomeScreenProps {
   children: User | null;
@@ -25,26 +26,34 @@ const Home: React.FC<HomeScreenProps> = ({ navigation, children }) => {
   const { unlockedAchievements } = useAppSelector((state: RootState) => state.achievements);
   const { weeklyAverage, monthlyAverage, totalReduction } = useAppSelector((state: RootState) => state.carbon);
 
+  // useEffect(() => {
+  //   const seedb = async () => {
+  //     console.log("seed achievements")
+  //     await seedDatabase();
+  //   }
+  //   seedb();
+  // });
+
   useEffect(() => {
     dispatch(fetchTips());
     dispatch(fetchArticles());
   }, [dispatch]);
 
-useEffect(() =>{
-  const loginWithToken = async () => {
-    try {
-      if(user){
-        const reduxUser = await getUser(user.uid);
-        if (reduxUser) {
-          dispatch(setUserData(reduxUser));
+  useEffect(() => {
+    const loginWithToken = async () => {
+      try {
+        if (user) {
+          const reduxUser = await getUser(user.uid);
+          if (reduxUser) {
+            dispatch(setUserData(reduxUser));
+          }
         }
-      }  
-    } catch (error) {
-      console.error('Login error:', error);
-    }
-  };
-loginWithToken()
-},[user])
+      } catch (error) {
+        console.error('Login error:', error);
+      }
+    };
+    loginWithToken()
+  }, [user])
 
   if (loading) {
     return <Text>Loading...</Text>;

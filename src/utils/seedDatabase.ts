@@ -1,5 +1,5 @@
 // src/utils/seedDatabase.ts
-import { collection, addDoc } from 'firebase/firestore';
+import { collection, addDoc, setDoc, doc } from 'firebase/firestore';
 import { db } from '../../firebase.config';
 
 const seedTips = async () => {
@@ -77,31 +77,40 @@ const seedArticles = async () => {
     }
 }
 
-const seedAchievements = async () => {
-    const achievementCollection = collection(db, 'achievement');
-    const achievementsData = [
-        {
-            name: "achievement name 1",
-            description: "achievement desc 1",
-            imageUrl: "img url 1",
-            requiredScore: 10,
-        },
-        {
-            name: "achievement name 2",
-            description: "achievement desc 2",
-            imageUrl: "img url 2",
-            requiredScore: 20,
-        },
-        {
-            name: "achievement name 3",
-            description: "achievement desc 3",
-            imageUrl: "img url 3",
-            requiredScore: 30,
-        },
-    ];
-
-    for (let achievement of achievementsData) {
-        await addDoc(achievementCollection, achievement);
+const sampleAchievements = [
+    {
+        id: 'first_step',
+        title: 'İlk Adım',
+        description: 'İlk karbon ayak izi hesaplamanızı yaptınız!',
+        imageUrl: 'https://example.com/first_step.png',
+        requiredFootprint: 0
+    },
+    {
+        id: 'carbon_saver_1',
+        title: 'Karbon Tasarrufçusu I',
+        description: 'Toplam 100 kg CO2 tasarrufu yaptınız!',
+        imageUrl: 'https://example.com/carbon_saver_1.png',
+        requiredFootprint: 100
+    },
+    {
+        id: 'eco_warrior',
+        title: 'Eko Savaşçı',
+        description: 'Toplam 1000 kg CO2 tasarrufu yaptınız!',
+        imageUrl: 'https://example.com/eco_warrior.png',
+        requiredFootprint: 1000
+    },
+    {
+        id: 'climate_champion',
+        title: 'İklim Şampiyonu',
+        description: 'Toplam 5000 kg CO2 tasarrufu yaptınız!',
+        imageUrl: 'https://example.com/climate_champion.png',
+        requiredFootprint: 5000
+    }
+];
+const addSampleAchievements = async () => {
+    const achievementsCollection = collection(db, 'achievements');
+    for (const achievement of sampleAchievements) {
+        await setDoc(doc(achievementsCollection, achievement.id), achievement);
     }
 };
 
@@ -129,9 +138,5 @@ const seedDailyFootPrints = async () => {
 
 
 export const seedDatabase = async () => {
-    await seedTips();
-    await seedUsers();
-    await seedArticles();
-    await seedAchievements();
-    await seedDailyFootPrints();
+    await addSampleAchievements()
 };

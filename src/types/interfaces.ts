@@ -49,10 +49,11 @@ export interface ArticlesState {
 
 export interface Achievement {
   id: string;
-  name: string;
+  title: string; 
   description: string;
   imageUrl: string;
-  requiredScore: number;
+  requiredFootprint: number;  
+  category?: string;  
 }
 
 export interface UnlockedAchievement extends Achievement {
@@ -62,10 +63,16 @@ export interface UnlockedAchievement extends Achievement {
 export interface AchievementsState {
   achievements: Achievement[];
   unlockedAchievements: UnlockedAchievement[];
+  totalFootPrint: TotalUserFootPrint | null;
   loading: boolean;
   error: string | null;
 }
 
+export interface TotalUserFootPrint {
+  userId: string;
+  totalFootprint: number;
+  lastUpdated: string;
+}
 
 export interface DailyFootprint {
   id: string,
