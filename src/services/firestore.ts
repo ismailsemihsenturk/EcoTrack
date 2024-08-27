@@ -258,12 +258,10 @@ export const getRankFromLeaderBoard = async (userName: string): Promise<number> 
     // Find the user's score
     const userEntry = leaderboardEntries.find(entry => entry.userName === userName);
     if (!userEntry) return 0; // User not found
-
     // Determine the rank based on the score
     const rank = leaderboardEntries
       .filter(entry => entry.totalFootprint > userEntry.totalFootprint) // Filter out entries with higher footprints
       .length + 1;
-
     return rank;
   } catch (error) {
     console.error("Error getting rank from leaderboard: ", error);

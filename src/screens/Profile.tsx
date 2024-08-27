@@ -29,12 +29,19 @@ const Profile: React.FC<ProfileScreenProps> = ({ route }) => {
     setSortedLeaderboard(sortedBoard);
   }, [leaderboard]);
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setLineChartData(Object.values(footprintHistory).map(fp => Number(fp.dailyTotalFootprint) || 0));
-    }, 100); // 100ms gecikme
 
-    return () => clearTimeout(timer); // Temizlik için
+  useEffect(() => {
+    const newLineChartData = [
+      0
+    ].concat(
+      Object.values(footprintHistory).map((fp) => {
+        const dailyTotalFootprint = Number(fp.dailyTotalFootprint);
+        return isNaN(dailyTotalFootprint) ? 0 : dailyTotalFootprint;
+      })
+    );
+
+    setLineChartData(newLineChartData);
+    console.log(LineChartData);
   }, [footprintHistory]);
 
 
@@ -137,7 +144,6 @@ const Profile: React.FC<ProfileScreenProps> = ({ route }) => {
         /> */}
         <View>
           <LineChart
-            key={LineChartData.length}
             style={styles.lineChart}
             data={LineChartData}
             svg={{ stroke: 'rgb(134, 65, 244)' }}
