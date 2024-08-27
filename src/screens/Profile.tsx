@@ -41,7 +41,6 @@ const Profile: React.FC<ProfileScreenProps> = ({ route }) => {
     );
 
     setLineChartData(newLineChartData);
-    console.log(LineChartData);
   }, [footprintHistory]);
 
 

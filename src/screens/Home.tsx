@@ -67,9 +67,18 @@ const Home: React.FC<HomeScreenProps> = ({ navigation }) => {
 
 
   const calculateWeeklyComparison = () => {
+    if (!dailyFootprints || Object.keys(dailyFootprints).length === 0) {
+      return 'You don\'t have enough data to calculate carbon footprint yet.';
+    }
+
     const sortedFootprints = Object.values(dailyFootprints).sort((a, b) =>
       new Date(b.date).getTime() - new Date(a.date).getTime()
     );
+    console.log(sortedFootprints.length)
+    // Check if sortedFootprints has less than 14 entries
+    if (sortedFootprints.length < 14) {
+      return 'You don\'t have enough data for a full week comparison yet.';
+    }
 
     const thisWeek = sortedFootprints.slice(0, 7);
     const lastWeek = sortedFootprints.slice(7, 14);
@@ -78,6 +87,7 @@ const Home: React.FC<HomeScreenProps> = ({ navigation }) => {
     const lastWeekAvg = lastWeek.reduce((sum, fp) => sum + fp.dailyTotalFootprint, 0) / lastWeek.length;
 
     const difference = thisWeekAvg - lastWeekAvg;
+
     return difference > 0
       ? `You emitted ${difference.toFixed(2)} kg more carbon this week than last week.`
       : `You emitted ${Math.abs(difference).toFixed(2)} kg less carbon this week than last week.`;
@@ -92,17 +102,20 @@ const Home: React.FC<HomeScreenProps> = ({ navigation }) => {
 
   const renderTip = useCallback(({ item }: { item: Tip }) => (
     <View style={styles.tipItem}>
-      <Text style={styles.tipCategory}>{item.category}</Text>
-      <Text style={styles.tipTitle}>{item.title}</Text>
+      <Text style={styles.tipTitle}>
+        {item.title}{' '}
+        <Text style={styles.tipCategory}>({item.category})</Text>
+      </Text>
       <Text style={styles.tipContent} numberOfLines={2}>{item.content}</Text>
     </View>
   ), []);
 
   const renderArticle = useCallback(({ item }: { item: Article }) => (
     <View style={styles.articleItem}>
-      <Text style={styles.articleTitle}>{item.title}</Text>
+      <Text style={styles.articleTitle}>{item.title}{' '}
+        <Text style={styles.articleDate}>({new Date(item.publishDate).toLocaleDateString()})</Text>
+      </Text>
       <Text style={styles.articleContent} numberOfLines={2}>{item.content}</Text>
-      <Text style={styles.articleDate}>{new Date(item.publishDate).toLocaleDateString()}</Text>
     </View>
   ), []);
 
@@ -245,6 +258,7 @@ const styles = StyleSheet.create({
     fontSize: theme.typography.fontSize.medium,
     color: theme.colors.secondary_text,
     marginLeft: theme.spacing.sm,
+    width: '90%',
   },
   listItem: {
     flexDirection: 'row',
