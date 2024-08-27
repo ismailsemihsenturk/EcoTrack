@@ -12,13 +12,6 @@ const initialState: CarbonState = {
   error: null,
 };
 
-// export const fetchFootprints = createAsyncThunk(
-//   'carbon/fetchFootprints',
-//   async (userId: string) => {
-//     const response = await getUserFootprints(userId);
-//     return response;
-//   }
-// );
 
 export const fetchUserFootprintHistory = createAsyncThunk(
   'carbon/fetchUserFootprintHistory',

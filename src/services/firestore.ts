@@ -103,7 +103,7 @@ export const saveDailyFootprint = async (userId: string, footprint: DailyFootpri
     const footprintToSave = {
       ...footprint,
       id: userId,
-      date: Date.now(),
+      date: new Date().toISOString(),
     };
     const userRef = doc(db, 'users', userId);
     const footprintsRef = collection(userRef, 'footprints');
@@ -116,14 +116,13 @@ export const saveDailyFootprint = async (userId: string, footprint: DailyFootpri
 
 export const getUserFootprints = async (userId: string, startDate: Date, endDate: Date): Promise<DailyFootprint[]> => {
   try {
-
-    const startDateTimestamp = startDate.getTime(); // Convert to milliseconds
-    const endDateTimestamp = endDate.getTime();     // Convert to milliseconds
+    const startDateString = startDate.toISOString();
+    const endDateString = endDate.toISOString();
 
     const snapshot = await getDocs(query(
       collection(db, 'users', userId, 'footprints'),
-      where('date', '>=', startDateTimestamp),
-      where('date', '<=', endDateTimestamp),
+      where('date', '>=', startDateString),
+      where('date', '<=', endDateString),
       orderBy('date')
     ));
     return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as DailyFootprint));

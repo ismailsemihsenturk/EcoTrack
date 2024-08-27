@@ -9,6 +9,7 @@ import { fetchUserFootprintHistory } from '../features/carbonSlice';
 import { LineChart, Grid } from 'react-native-svg-charts'
 import UserInfo from '../components/screens/userInfo';
 import { updateScoreandRank } from '../features/userSlice';
+import { getUserFootprints } from '../services/firestore';
 
 interface ProfileScreenProps {
   route: RouteProp<RootStackParamList, 'Profile'>;
@@ -19,15 +20,23 @@ const Profile: React.FC<ProfileScreenProps> = ({ route }) => {
   const user = useAppSelector((state) => state.user);
   const leaderboard = useAppSelector((state) => state.leaderboard.entries);
   const footprintHistory = useAppSelector((state) => state.carbon.dailyFootprints);
-
   const [chartTimeframe, setChartTimeframe] = useState<'daily' | 'weekly' | 'monthly'>('daily');
   const [sortedLeaderboard, setSortedLeaderboard] = useState<LeaderboardEntry[]>([]);
+  const [LineChartData, setLineChartData] = useState<number[]>([]);
 
   useEffect(() => {
     // Create a new array by copying the leaderboard
     const sortedBoard = [...leaderboard].sort((a, b) => b.totalFootprint - a.totalFootprint);
     setSortedLeaderboard(sortedBoard);
   }, [leaderboard]);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setLineChartData(Object.values(footprintHistory).map(fp => Number(fp.dailyTotalFootprint) || 0));
+    }, 100); // 100ms gecikme
+
+    return () => clearTimeout(timer); // Temizlik için
+  }, [footprintHistory]);
 
 
   useEffect(() => {
@@ -44,6 +53,7 @@ const Profile: React.FC<ProfileScreenProps> = ({ route }) => {
     }
     dispatch(fetchUserFootprintHistory({ userId: user.id, startDate: startDate, endDate: endDate }));
   }, [dispatch, user.id, chartTimeframe]);
+
 
   const handleTimeframeChange = (timeframe: 'daily' | 'weekly' | 'monthly') => {
     setChartTimeframe(timeframe);
@@ -67,12 +77,10 @@ const Profile: React.FC<ProfileScreenProps> = ({ route }) => {
   //   ]
   // };
 
-  const LineChartData = Object.values(footprintHistory).map(fp => Number(fp.dailyTotalFootprint) || 0);
 
   if (LineChartData.length === 0) {
     return <Text>No data available for the selected timeframe.</Text>;
   }
-
 
   return (
     <ScrollView style={styles.container}>
@@ -130,6 +138,7 @@ const Profile: React.FC<ProfileScreenProps> = ({ route }) => {
         /> */}
         <View>
           <LineChart
+            key={LineChartData.length}
             style={styles.lineChart}
             data={LineChartData}
             svg={{ stroke: 'rgb(134, 65, 244)' }}

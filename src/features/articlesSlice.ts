@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction,createAsyncThunk } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
 import { Article, ArticlesState } from '../types/interfaces';
 import { getArticles } from '../services/firestore';
 
@@ -43,7 +43,7 @@ const articlesSlice = createSlice({
       })
       .addCase(fetchArticles.fulfilled, (state, action) => {
         state.loading = false;
-        state.articles = [...state.articles, ...action.payload];
+        state.articles = action.payload;
       })
       .addCase(fetchArticles.rejected, (state, action) => {
         state.loading = false;
