@@ -30,7 +30,7 @@ const Home: React.FC<HomeScreenProps> = ({ navigation }) => {
       dispatch(fetchTips());
       dispatch(fetchArticles());
       dispatch(fetchAchievements(user.uid));
-      
+
       const endDate = new Date();
       const startDate = new Date(endDate);
       startDate.setDate(startDate.getDate() - 14); // Son 2 hafta
@@ -55,10 +55,10 @@ const Home: React.FC<HomeScreenProps> = ({ navigation }) => {
   }, [user, dispatch]);
 
   const calculateWeeklyComparison = () => {
-    const sortedFootprints = Object.values(dailyFootprints).sort((a, b) => 
+    const sortedFootprints = Object.values(dailyFootprints).sort((a, b) =>
       new Date(b.date).getTime() - new Date(a.date).getTime()
     );
-    
+
     const thisWeek = sortedFootprints.slice(0, 7);
     const lastWeek = sortedFootprints.slice(7, 14);
 
@@ -66,9 +66,9 @@ const Home: React.FC<HomeScreenProps> = ({ navigation }) => {
     const lastWeekAvg = lastWeek.reduce((sum, fp) => sum + fp.dailyTotalFootprint, 0) / lastWeek.length;
 
     const difference = thisWeekAvg - lastWeekAvg;
-    return difference > 0 
-      ? `Bu hafta geçen haftaya göre ${difference.toFixed(2)} kg daha fazla karbon salınımı yaptınız.`
-      : `Bu hafta geçen haftaya göre ${Math.abs(difference).toFixed(2)} kg daha az karbon salınımı yaptınız.`;
+    return difference > 0
+      ? `You emitted ${difference.toFixed(2)} kg more carbon this week than last week.`
+      : `You emitted ${Math.abs(difference).toFixed(2)} kg less carbon this week than last week.`;
   };
 
   if (authLoading || tipsLoading || articlesLoading) {
@@ -77,29 +77,29 @@ const Home: React.FC<HomeScreenProps> = ({ navigation }) => {
 
   return (
     <ScrollView style={styles.container}>
-      <Text style={styles.welcomeText}>Hoş geldin, {userRedux.userName}</Text>
-      
+      <Text style={styles.welcomeText}>Welcome, {userRedux.userName}</Text>
+
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Eco İpuçları</Text>
+        <Text style={styles.sectionTitle}>Eco Tips</Text>
         {tips.slice(0, 3).map((tip: Tip) => (
           <Text key={tip.id}>{tip.title}</Text>
         ))}
       </View>
 
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Makaleler</Text>
+        <Text style={styles.sectionTitle}>News</Text>
         {articles.slice(0, 3).map((article: Article) => (
           <Text key={article.id}>{article.title}</Text>
         ))}
       </View>
 
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Başarımlar</Text>
-        <Text>{unlockedAchievements.length} / {achievements.length} başarım açtınız.</Text>
+        <Text style={styles.sectionTitle}>Achievements</Text>
+        <Text>You have unlocked {unlockedAchievements.length} / {achievements.length} achievements.</Text>
       </View>
 
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Karbon Ayak İzi Karşılaştırması</Text>
+        <Text style={styles.sectionTitle}>Carbon Footprint Comparison</Text>
         <Text>{calculateWeeklyComparison()}</Text>
       </View>
     </ScrollView>
