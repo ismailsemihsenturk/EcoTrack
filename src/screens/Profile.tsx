@@ -9,7 +9,6 @@ import { fetchUserFootprintHistory } from '../features/carbonSlice';
 import { LineChart, Grid } from 'react-native-svg-charts'
 import UserInfo from '../components/screens/userInfo';
 import { updateScoreandRank } from '../features/userSlice';
-import { getUserFootprints } from '../services/firestore';
 
 interface ProfileScreenProps {
   route: RouteProp<RootStackParamList, 'Profile'>;
